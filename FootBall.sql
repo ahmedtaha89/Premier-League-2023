@@ -26,8 +26,6 @@ on info.Player = ps.Player
 ORDER BY Height DESC
 
 
-
-
 -- PlayerStats Table
 
 -- Retrieve Top 10  player information, including their club and the maximum number of goals they scored
@@ -45,7 +43,6 @@ SELECT TOP 10 Player
 	,Assists AS 'Number Of Assists'
 FROM PlayerStats
 ORDER BY Assists DESC
-
 
 
 
@@ -143,8 +140,6 @@ select  * from  Salary
 select  * from PlayerStats
 
 
-
-
 	SELECT player_s.Player
 		,Nationality
 		,Age
@@ -156,16 +151,6 @@ select  * from PlayerStats
 	INNER JOIN Player_Info info ON player_s.Player = info.Player
 	JOIN Salary s ON info.Player = s.Player
 	Where player_s.Player = 'Erling Haaland'
-
-
-
-
-
-
-
-
-
-
 
 
 
