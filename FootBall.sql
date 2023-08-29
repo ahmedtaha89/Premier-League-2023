@@ -14,7 +14,7 @@ ORDER BY COUNT(Nationality) DESC
 
 
 -- Retrieve the top 3 players with their ages, ordered by age in descending order
-SELECT  TOP (3) Player , Age
+SELECT  TOP (3) Player , Age 
 FROM  Player_Info
 ORDER BY AGE DESC
 
@@ -167,12 +167,44 @@ BEGIN
 	FROM PlayerStats player_s
 	INNER JOIN Player_Info info ON player_s.Player = info.Player
 	JOIN Salary s ON info.Player = s.Player
-	Where player_s.Player = @PlayerName
+	Where player_s.Player = @PlayerName 
 END
 
 exec PlayerInformation 'Mohamed Salah'
 exec PlayerInformation 'Kevin De Bruyne'
 exec PlayerInformation 'Leandro Trossard'
 
---Kevin De Bruyne
---Leandro Trossard
+
+
+
+-- Retrieve All player and Filter Using Club
+CREATE PROCEDURE Club_Info (@Club AS VARCHAR(20))
+AS
+BEGIN
+	SELECT player_s.Player
+		,Nationality
+		,Age
+		,Club
+		,Position
+		,Goals
+		,s.price
+	FROM PlayerStats player_s
+	INNER JOIN Player_Info info ON player_s.Player = info.Player
+	JOIN Salary s ON info.Player = s.Player
+	Where Club = @Club
+END
+
+exec Club_Info 'Manchester City'
+
+exec Club_Info 'Arsenal'
+
+
+
+-- Select the club and calculate the average age for each club
+SELECT club , avg(Age) 'Avg Age' FROM Player_Info info join PlayerStats player_S
+on info.Player = player_S.Player
+group by club
+order by  avg(Age)
+
+
+
