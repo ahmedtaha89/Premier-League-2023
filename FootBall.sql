@@ -42,11 +42,9 @@ ORDER BY Goals DESC
 -- This query retrieves the top 10 players based on their number of assists
 SELECT TOP 10 Player
 	,Club
-	,max(Assists) AS 'Number Of Assists'
+	,Assists AS 'Number Of Assists'
 FROM PlayerStats
-GROUP BY Player
-	,Club
-ORDER BY max(Assists) DESC
+ORDER BY Assists DESC
 
 
 
@@ -68,14 +66,11 @@ FROM PlayerStats
 GROUP BY Club
 ORDER BY SUM(GOALS)  DESC
 
-UPDATE PlayerStats
-SET Clean_Sheets = 1
-WHERE Player IN (
-'Daniel Iversen',
-'Robin Olsen')
-
-
-select  * from PlayerStats
+--UPDATE PlayerStats
+--SET Clean_Sheets = 1
+--WHERE Player IN (
+--'Daniel Iversen',
+--'Robin Olsen')
 
 INSERT INTO PlayerStats 
 values
@@ -83,8 +78,23 @@ values
 	);
 
 
+
+select  * from PlayerStats
+
+-- This query retrieves the count of players for each unique position from the PlayerStats table.
+select  Position , COUNT(Position) 'Number Of Players' from PlayerStats
+group by Position
+order by COUNT(Position) desc
+
+
+select top 10 Player , Club , Interceptions 'Number Of Interceptions'  , Blocks
+from PlayerStats
+order by Interceptions desc
+
+
+
 -- retrieve Top 3 Player have Clean Sheets
-SELECT TOP 3 Player
+SELECT TOP 3 with ties Player
 	,Club
 	,Clean_Sheets
 	,Apperence
@@ -93,26 +103,28 @@ WHERE Position = 'GK'
 ORDER BY Clean_Sheets DESC
 
 
+-- Teams Table
+select  * from Teams
+
+-- Top 5 Squad
+Select  top 5 Squad , Points from Teams 
+order by Points desc
 
 
+Select top 3 Squad , Points  from Teams
+order by Points asc
 
 
+Select top 3 Squad , Wins , Losses  from Teams
+order by Wins desc
 
-
-
-
-
-
-
-
-
-
+Select top 4 Squad , Goals_For , Goals_Against  from Teams
+order by Goals_For desc
 
 
 select  * from Salary
 
-select  * from Teams
-order by Points desc
+
 
 select info.Player , Nationality  , Club from Player_Info  info join  Player_Stats stat
 on info.Player = stat.Player
@@ -123,7 +135,59 @@ on s.Player = pl.Player
 
 
 select  * from Teams
+
+select * from Player_Info
+
+select  * from  Salary
+
 select  * from PlayerStats
 
-select Player , Goals , Squad , Matches_Played , Wins , Losses  from Teams t join PlayerStats ps
-on t.Squad = ps.Club
+
+
+
+	SELECT player_s.Player
+		,Nationality
+		,Age
+		,Club
+		,Position
+		,Goals
+		,s.price
+	FROM PlayerStats player_s
+	INNER JOIN Player_Info info ON player_s.Player = info.Player
+	JOIN Salary s ON info.Player = s.Player
+	Where player_s.Player = 'Erling Haaland'
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE PlayerInformation(@PlayerName AS VARCHAR(40))
+AS
+BEGIN
+	SELECT player_s.Player
+		,Nationality
+		,Age
+		,Club
+		,Position
+		,Goals
+		,s.price
+	FROM PlayerStats player_s
+	INNER JOIN Player_Info info ON player_s.Player = info.Player
+	JOIN Salary s ON info.Player = s.Player
+	Where player_s.Player = @PlayerName
+END
+
+exec PlayerInformation 'Mohamed Salah'
+exec PlayerInformation 'Kevin De Bruyne'
+exec PlayerInformation 'Leandro Trossard'
+
+--Kevin De Bruyne
+--Leandro Trossard
